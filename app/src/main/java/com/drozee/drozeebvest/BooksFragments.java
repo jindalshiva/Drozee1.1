@@ -1,9 +1,12 @@
 package com.drozee.drozeebvest;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AlertDialogLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,12 +34,12 @@ import butterknife.Unbinder;
 public class BooksFragments extends Fragment {
 
 
-    @BindView(R.id.editText5)
-    EditText editText5;
-    @BindView(R.id.editText6)
-    EditText editText6;
-    @BindView(R.id.imageButton2)
-    Button imageButton2;
+//    @BindView(R.id.editText5)
+//    EditText editText5;
+//    @BindView(R.id.editText6)
+//    EditText editText6;
+//    @BindView(R.id.imageButton2)
+//    Button imageButton2;
     Unbinder unbinder;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mFirebaseDatabase;
@@ -43,14 +47,59 @@ public class BooksFragments extends Fragment {
     private DatabaseReference mListReference;
     RecyclerView recyclerView;
     List<Books> booklist;
+    private EditText editBookName,editAuthorName;
+    private Button buttonAdd,buttonShow;
     RecyclerViewAdapter viewAdapter = new RecyclerViewAdapter(getActivity(), booklist);
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bookfragment, null);
+        View view = inflater.inflate(R.layout.bookfragment,container, false);
         unbinder = ButterKnife.bind(this, view);
+        buttonShow = (Button) view.findViewById(R.id.imageButton2);
+        buttonShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                View mview = getLayoutInflater ().inflate (R.layout.add_dialog,null);
+
+                editBookName = (EditText) mview.findViewById(R.id.edit_book);
+                editAuthorName = (EditText) mview.findViewById(R.id.edit_author);
+               buttonAdd = (Button) mview.findViewById(R.id.button_add);
+
+               editBookName.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       editBookName.requestFocusFromTouch();
+                   }
+               });
+               editAuthorName.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       editAuthorName.requestFocusFromTouch();
+                   }
+               });
+
+               buttonAdd.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       Books newbook = new Books(editBookName.getText().toString(),editAuthorName.getText().toString());
+                       mListReference.child(editBookName.getText().toString()).setValue(newbook);
+                       editBookName.setText("");
+                       editAuthorName.setText("");
+
+                   }
+               });
+                alert.setView (mview);
+                AlertDialog dialog = alert.create ();
+                dialog.show ();
+
+
+
+            }
+        });
+
         return view;
 
     }
@@ -69,18 +118,18 @@ public class BooksFragments extends Fragment {
 //        recyclerView.setAdapter(viewAdapter);
         String user = mAuth.getCurrentUser().getUid();
 
-        editText5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editText5.requestFocusFromTouch();
-            }
-        });
-        editText6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editText6.requestFocusFromTouch();
-            }
-        });
+//        editText5.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                editText5.requestFocusFromTouch();
+//            }
+//        });
+//        editText6.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                editText6.requestFocusFromTouch();
+//            }
+//        });
 
     }
 
@@ -93,8 +142,8 @@ public class BooksFragments extends Fragment {
                 booklist.clear();
                 for (DataSnapshot applianceSnapshot : dataSnapshot.getChildren()) {
 
-                    Books bookslista = applianceSnapshot.getValue(Books.class);
-                    booklist.add(bookslista);
+                    Books bookslist = applianceSnapshot.getValue(Books.class);
+                    booklist.add(bookslist);
                 }
                 RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), booklist);
                 recyclerView.setAdapter(adapter);
@@ -116,10 +165,11 @@ public class BooksFragments extends Fragment {
 
     @OnClick(R.id.imageButton2)
     public void onViewClicked() {
-        Books newbook = new Books(editText5.getText().toString(),editText6.getText().toString());
-        mListReference.child(editText5.getText().toString()).setValue(newbook);
-        editText5.setText("");
-        editText6.setText("");
+//        Books newbook = new Books(editText5.getText().toString(),editText6.getText().toString());
+//        mListReference.child(editText5.getText().toString()).setValue(newbook);
+//        editText5.setText("");
+//        editText6.setText("");
+        Toast.makeText(getActivity(),"hello",Toast.LENGTH_SHORT).show();
     }
 
 
