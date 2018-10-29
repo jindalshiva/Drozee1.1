@@ -5,10 +5,12 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -50,6 +52,10 @@ public class LoginUpdated extends AppCompatActivity {
     @BindView(R.id.signUp)
     TextView textView2;
 
+
+    private CheckBox checkbox;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +74,25 @@ public class LoginUpdated extends AppCompatActivity {
         progressBar = findViewById(R.id.top_progress_bar);
         progressBar.setVisibility(View.GONE);
 
+
+//        checkbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                boolean checked = ((CheckBox) view).isChecked();
+//                if(checked)
+//                {
+//                    Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
     }
 
     @OnClick(R.id.imageButton)
     public void onViewClicked() {
         //startActivity(new Intent(this, PreferencesActivity.class));
+
+
         loginuser();
 
     }
@@ -82,6 +102,8 @@ public class LoginUpdated extends AppCompatActivity {
 
         // to get Password from user and store it in variable called Password
         final String PassWord = editText4.getText().toString().trim();
+
+
         if (emailstring.isEmpty()) {
             //set an error
             editText.setError("Email is required");

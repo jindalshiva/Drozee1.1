@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nostra13.universalimageloader.utils.L;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +46,7 @@ public class SignUp extends AppCompatActivity {
     TextView already;
     @BindView(R.id.forgot)
     TextView forgot;
+    private CheckBox checkBox;
     private FirebaseAuth mAuth;
     public String email, password, confirm, sessionID;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -58,6 +62,8 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.loginupdated);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toast.makeText(getApplicationContext(),"still sign up",Toast.LENGTH_SHORT).show();
+
+
 
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
@@ -165,7 +171,33 @@ public class SignUp extends AppCompatActivity {
 
     @OnClick(R.id.imageButton)
     public void onViewClicked() {
-        setSignupa();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder (SignUp.this);
+        View mview = getLayoutInflater ().inflate (R.layout.termdialog,null);
+
+        checkBox = (CheckBox) mview.findViewById(R.id.checkTerms);
+
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean checked = ((CheckBox) view).isChecked();
+                if (checked)
+                {
+//                    Intent intent = new Intent(LoginUpdated.this, DetailsSignup.class);
+//                    startActivity(intent);
+                    setSignupa();
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Please agree terms and conditions", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        builder.setView (mview);
+        AlertDialog dialog = builder.create ();
+        dialog.show ();
 
 
     }
