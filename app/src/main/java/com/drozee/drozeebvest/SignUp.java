@@ -46,7 +46,8 @@ public class SignUp extends AppCompatActivity {
     TextView already;
     @BindView(R.id.forgot)
     TextView forgot;
-    private CheckBox checkBox;
+    private Button butAgree,butdisagree;
+    // private CheckBox checkBox;
     private FirebaseAuth mAuth;
     public String email, password, confirm, sessionID;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -175,25 +176,39 @@ public class SignUp extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder (SignUp.this);
         View mview = getLayoutInflater ().inflate (R.layout.termdialog,null);
 
-        checkBox = (CheckBox) mview.findViewById(R.id.checkTerms);
-
-        checkBox.setOnClickListener(new View.OnClickListener() {
+//        checkBox = (CheckBox) mview.findViewById(R.id.checkTerms);
+//
+//        checkBox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                boolean checked = ((CheckBox) view).isChecked();
+//                if (checked)
+//                {
+////                    Intent intent = new Intent(LoginUpdated.this, DetailsSignup.class);
+////                    startActivity(intent);
+//                    setSignupa();
+//
+//                }
+//                else
+//                {
+//                    Toast.makeText(getApplicationContext(),"Please agree terms and conditions", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        });
+        butAgree = (Button) mview.findViewById(R.id.buttonAgree);
+        butdisagree = (Button) mview.findViewById(R.id.buttonReject);
+        butAgree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean checked = ((CheckBox) view).isChecked();
-                if (checked)
-                {
-//                    Intent intent = new Intent(LoginUpdated.this, DetailsSignup.class);
-//                    startActivity(intent);
-                    setSignupa();
-
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Please agree terms and conditions", Toast.LENGTH_SHORT).show();
-                }
-
+                setSignupa();
             }
+        });
+        butdisagree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Please agree terms and conditions", Toast.LENGTH_SHORT).show();
+                }
         });
         builder.setView (mview);
         AlertDialog dialog = builder.create ();
